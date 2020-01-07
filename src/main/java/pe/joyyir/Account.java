@@ -1,5 +1,9 @@
 package pe.joyyir;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,6 +24,12 @@ public class Account {
 
     @Temporal(TemporalType.TIMESTAMP) // DATE(날짜), TIME(시간), TIMESTAMP(날짜+시간), JPA 2.1 까지는 @Temporal은 Date와 Calander 밖에 지원하지 않음
     private Date created;
+
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "street", column = @Column(name = "home_street")) // 테이블의 home_street 컬럼을 homeAddress 객체의 street 필드로 매핑
+    })
+    private Address homeAddress;
 
     public Long getId() {
         return id;
