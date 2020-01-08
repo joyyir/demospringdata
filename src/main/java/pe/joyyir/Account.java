@@ -7,9 +7,12 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -30,6 +33,14 @@ public class Account {
         @AttributeOverride(name = "street", column = @Column(name = "home_street")) // 테이블의 home_street 컬럼을 homeAddress 객체의 street 필드로 매핑
     })
     private Address homeAddress;
+
+    // 1 account <--- 1 study
+    // 1 account ---> n study
+    // 1 account <--> n study
+    // account_studies라는 테이블이 생긴다.
+//    @OneToMany // 단방향
+    @OneToMany(mappedBy = "owner") // 양방향. Study의 owner 필드와 매핑됨을 전달함. Account가 non-owning side가 되고 Stduy가 owning side가 됨 (FK를 가진 쪽이 owning side)
+    private Set<Study> studies = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -53,5 +64,27 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Study> getStudies() {
+        return studies;
+    }
+
+    public void setStudies(Set<Study> studies) {
+        this.studies = studies;
+    }
+
+
+    // 관계를 설정할 때는 아래와 같이 쌍으로 설정해야함
+    // 이러한 관계를 설정하는 메소드를 convenient method 라고 함
+    public void addStudy(Study study) {
+        this.getStudies().add(study);
+        study.setOwner(this);
+    }
+
+    // 지울 때도 둘 다 처리
+    public void removeStudy(Study study) {
+        this.getStudies().remove(study);
+        study.setOwner(null);
     }
 }

@@ -19,8 +19,14 @@ public class JpaRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Account account = new Account();
-        account.setUsername("jyjang2");
-        account.setPassword("pass2");
+        account.setUsername("jyjang");
+        account.setPassword("pass");
+
+        Study study = new Study();
+        study.setName("Spring Data JPA");
+//        study.setOwner(account);
+
+        account.addStudy(study);
 
         // 방법 1
 //        entityManager.persist(account);
@@ -28,5 +34,6 @@ public class JpaRunner implements ApplicationRunner {
         // 방법 2 : hibernate api
         Session session = entityManager.unwrap(Session.class);
         session.save(account);
+        session.save(study);
     }
 }
