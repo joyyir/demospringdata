@@ -18,28 +18,42 @@ public class JpaRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Account account = new Account();
-        account.setUsername("jyjang");
-        account.setPassword("pass");
+//        Account account = new Account();
+//        account.setUsername("jyjang");
+//        account.setPassword("pass");
+//
+//        Study study = new Study();
+//        study.setName("Spring Data JPA");
+////        study.setOwner(account);
+//
+//        account.addStudy(study);
+//
+//        // 방법 1
+////        entityManager.persist(account);
+//
+//        // 방법 2 : hibernate api
+//        Session session = entityManager.unwrap(Session.class);
+//        session.save(account);
+//        session.save(study);
+//
+//        Account jyjang = session.load(Account.class, account.getId());
+//        jyjang.setUsername("joyyir");
+//        jyjang.setUsername("jyjang"); // update가 발생하지 않음!!! 바꿀 필요가 없으니까 (dirty checking, write behind)
+//        System.out.println("====================");
+//        System.out.println(jyjang.getUsername());
 
-        Study study = new Study();
-        study.setName("Spring Data JPA");
-//        study.setOwner(account);
+        Post post = new Post();
+        post.setTitle("첫 글이에요");
 
-        account.addStudy(study);
+        Comment comment1 = new Comment();
+        comment1.setComment("안녕하세요");
+        post.addComment(comment1);
 
-        // 방법 1
-//        entityManager.persist(account);
+        Comment comment2 = new Comment();
+        comment2.setComment("반가워요");
+        post.addComment(comment2);
 
-        // 방법 2 : hibernate api
         Session session = entityManager.unwrap(Session.class);
-        session.save(account);
-        session.save(study);
-
-        Account jyjang = session.load(Account.class, account.getId());
-        jyjang.setUsername("joyyir");
-        jyjang.setUsername("jyjang"); // update가 발생하지 않음!!! 바꿀 필요가 없으니까 (dirty checking, write behind)
-        System.out.println("====================");
-        System.out.println(jyjang.getUsername());
+        session.save(post); // post만 저장되고 comment1, comment2는 저장 안된다.
     }
 }
