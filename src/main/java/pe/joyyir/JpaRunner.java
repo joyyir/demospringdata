@@ -33,7 +33,12 @@ public class JpaRunner implements ApplicationRunner {
 
         // 방법 2 : hibernate api
         Session session = entityManager.unwrap(Session.class);
-        session.save(account);
-        session.save(study);
+        session.save(account); // 이때 insert 되는게 아님
+        session.save(study); // 이때 insert 되는게 아님
+
+        Account jyjang = session.load(Account.class, account.getId()); // 이때 select 쿼리를 날리지 않는다! 캐시에서 객체를 그냥 가져온다.
+        System.out.println("====================");
+        System.out.println(jyjang.getUsername());
+        // 이 메소드 나가서 트랜잭션이 커밋될 시점에 insert 쿼리 실행됨
     }
 }
