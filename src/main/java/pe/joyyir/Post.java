@@ -1,5 +1,6 @@
 package pe.joyyir;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ public class Post {
 
     private String title;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private Set<Comment> comments = new HashSet<>();
 
     public Long getId() {

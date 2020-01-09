@@ -54,6 +54,6 @@ public class JpaRunner implements ApplicationRunner {
         post.addComment(comment2);
 
         Session session = entityManager.unwrap(Session.class);
-        session.save(post); // post만 저장되고 comment1, comment2는 저장 안된다.
+        session.save(post); // post도 저장되고 comment1, comment2도 저장된다.
     }
 }
