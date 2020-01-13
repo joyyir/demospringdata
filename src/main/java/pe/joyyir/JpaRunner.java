@@ -57,11 +57,12 @@ public class JpaRunner implements ApplicationRunner {
 //        session.save(post); // post도 저장되고 comment1, comment2도 저장된다.
 
         Session session = entityManager.unwrap(Session.class);
-        Post post = session.get(Post.class, 1L);
+//        Post post = session.get(Post.class, 1L);
 //        session.delete(post); // post도 제거되고 comment1, comment2도 제거된다.
+        Comment comment = session.get(Comment.class, 2L);
 
-        System.out.println(post.getTitle());
-        System.out.println("이때 SELECT 실행 (LAZY)");
-        System.out.println(post.getComments().toString());
+        System.out.println(comment.getComment());
+        System.out.println("이때 SELECT 실행 안함 (EAGER)");
+        System.out.println(comment.getPost().getTitle());
     }
 }
