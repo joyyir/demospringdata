@@ -58,6 +58,10 @@ public class JpaRunner implements ApplicationRunner {
 
         Session session = entityManager.unwrap(Session.class);
         Post post = session.get(Post.class, 1L);
-        session.delete(post); // post도 제거되고 comment1, comment2도 제거된다.
+//        session.delete(post); // post도 제거되고 comment1, comment2도 제거된다.
+
+        System.out.println(post.getTitle());
+        System.out.println("이때 SELECT 실행 (LAZY)");
+        System.out.println(post.getComments().toString());
     }
 }

@@ -16,7 +16,7 @@ public class Post {
 
     private String title;
 
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}) // OneToMany는 디폴트로 fetch=FetchType.LAZY
     private Set<Comment> comments = new HashSet<>();
 
     public Long getId() {

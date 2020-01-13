@@ -14,7 +14,7 @@ public class Comment {
     private String comment;
 
     @ManyToOne
-    private Post post;
+    private Post post; // ManyToOne은 디폴트로 fetch=FetchType.EAGER
 
     public Long getId() {
         return id;
