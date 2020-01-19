@@ -1,18 +1,13 @@
 package pe.joyyir;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Component
 @Transactional
@@ -70,24 +65,39 @@ public class JpaRunner implements ApplicationRunner {
 //        System.out.println("이때 SELECT 실행 안함 (EAGER)");
 //        System.out.println(comment.getPost().getTitle());
 
-        // 방법 1
-        TypedQuery<Post> query = entityManager.createQuery("SELECT p FROM Post p", Post.class);
-        List<Post> posts = query.getResultList();
-//        posts.forEach(System.out::println);
+//        // 방법 1
+//        TypedQuery<Post> query = entityManager.createQuery("SELECT p FROM Post p", Post.class);
+//        List<Post> posts = query.getResultList();
+////        posts.forEach(System.out::println);
+//
+//        // 방법 2
+//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Post> query2 = builder.createQuery(Post.class);
+//        Root<Post> root = query2.from(Post.class);
+//        query2.select(root);
+//        List<Post> posts2 = entityManager.createQuery(query2).getResultList();
+////        posts2.forEach(System.out::println);
+//
+//        // 방법 3. NamedQuery 쓰면 mybatis처럼 쓸 수 있다.
+//
+//        // 방법 4
+//        Query query3 = entityManager.createNativeQuery("select * from Post", Post.class);
+//        List<Post> posts3 = query3.getResultList();
+//        posts3.forEach(System.out::println);
 
-        // 방법 2
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Post> query2 = builder.createQuery(Post.class);
-        Root<Post> root = query2.from(Post.class);
-        query2.select(root);
-        List<Post> posts2 = entityManager.createQuery(query2).getResultList();
-//        posts2.forEach(System.out::println);
+        // QueryDSL 연동 테스트
+        Account account = new Account();
+        account.setUsername("jyjang");
+        account.setPassword("pass");
 
-        // 방법 3. NamedQuery 쓰면 mybatis처럼 쓸 수 있다.
+        entityManager.persist(account);
 
-        // 방법 4
-        Query query3 = entityManager.createNativeQuery("select * from Post", Post.class);
-        List<Post> posts3 = query3.getResultList();
-        posts3.forEach(System.out::println);
+        QAccount qAccount = QAccount.account;
+        JPAQuery<?> query = new JPAQuery<Void>(entityManager);
+        Account jyjang = query.select(qAccount)
+                              .from(qAccount)
+                              .where(qAccount.username.eq("jyjang"))
+                              .fetchOne();
+        System.out.println(jyjang);
     }
 }
